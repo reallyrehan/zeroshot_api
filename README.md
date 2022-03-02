@@ -8,3 +8,8 @@ A simple Flask-based GET and POST API to utilize Hugging Face's [Zero Shot Text 
 - [x] Add Error Handling
 - [ ] Add Fast-API
 - [ ] Add Gladia
+
+![API Example](images/apiexample.png)
+
+# Swagger Documentation
+![Swagger](images/swagger.png)
