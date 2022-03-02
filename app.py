@@ -44,10 +44,24 @@ def api_doc_swagger():
 
 @app.route('/api',methods = ['GET',"POST"])
 def predict():
+    # print(request.values)
+
+
     error_list = []
 
-    sequence = request.values.get('sequence')
-    labels = request.values.getlist('labels')
+    if request.method == "GET":
+        sequence = request.values.get('sequence')
+        labels = request.values.getlist('labels')
+    elif request.method == "POST":
+        try:
+            data = request.get_json()
+            sequence = data['sequence'] if 'sequence' in data else None
+            labels = data['labels'] if 'labels' in data else None
+        except:
+            return jsonify({'error':['Data Json Not Found']}),405
+    else:
+        return jsonify({'error':['Invalid Request Method']}),405
+
 
     # Check if sequence exists
     if not sequence:
