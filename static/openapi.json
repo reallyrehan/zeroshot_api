@@ -1,0 +1,158 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "Zeroshot API",
+      "description": "An API to perform Zero Shot Classification for the given sequence of text and labels"
+    },
+    "paths": {
+      "/api": {
+        "get": {
+          "tags": [
+            "Zeroshot Prediction"
+          ],
+          "description": "Returns predictions for your specified label and text",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "sequence",
+              "required": true,
+              "description": "A sequence of text",
+              "schema": {
+                "type": "string",
+                "example": "I love to eat"
+              }
+            },
+            {
+              "in": "query",
+              "name": "labels",
+              "required": true,
+              "description": "Labels to classify the text on",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "example": [
+                  "food",
+                  "religion"
+                ]
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Classificiation metrics for each provided label",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "example": {
+                      "result": {
+                        "labels": [
+                          "food",
+                          "religion"
+                        ],
+                        "scores": [
+                          0.998341977596283,
+                          0.0016579453367739916
+                        ],
+                        "sequence": "I love to eat"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad parameters",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "example": {
+                      "error": [
+                        "Sequence variable not found",
+                        "Labels variable not found"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+            "tags": [
+              "Zeroshot Prediction"
+            ],
+            "description": "Returns predictions for your specified label and text",
+            "parameters": [
+              {
+                "in": "query",
+                "name": "sequence",
+                "required": true,
+                "description": "A sequence of text",
+                "schema": {
+                  "type": "string",
+                  "example": "I love to eat"
+                }
+              },
+              {
+                "in": "query",
+                "name": "labels",
+                "required": true,
+                "description": "Labels to classify the text on",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "food",
+                    "religion"
+                  ]
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Classificiation metrics for each provided label",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "example": {
+                        "result": {
+                          "labels": [
+                            "food",
+                            "religion"
+                          ],
+                          "scores": [
+                            0.998341977596283,
+                            0.0016579453367739916
+                          ],
+                          "sequence": "I love to eat"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "400": {
+                "description": "Bad parameters",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "example": {
+                        "error": [
+                          "Sequence variable not found",
+                          "Labels variable not found"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+      }
+    }
+  }
