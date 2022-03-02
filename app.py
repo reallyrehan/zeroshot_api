@@ -1,8 +1,6 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, json, render_template, redirect
 
 from transformers import pipeline
-
-
 
 
 app = Flask(__name__)
@@ -26,6 +24,8 @@ def get_model():
 
 def evaluate(sequence,labels):
 
+    # return {"result":{"labels":["food","religion"],"scores":[0.998341977596283,0.0016579453367739916],"sequence":"I love to eat"}}
+
     model = get_model()
 
     result = model(sequence, labels)
@@ -35,9 +35,14 @@ def evaluate(sequence,labels):
     return result
 
 
+@app.route('/api/docs')
+def api_doc_swagger():
+    print('sending docs')
+    return render_template('swaggerui.html')
 
 
-@app.route('/predict',methods = ['GET',"POST"])
+
+@app.route('/api',methods = ['GET',"POST"])
 def predict():
     error_list = []
 
@@ -56,10 +61,10 @@ def predict():
     if len(error_list) == 0:
         result = evaluate(sequence,labels)
 
-        return jsonify({'result':result})
+        return jsonify({'result':result}),200
 
     else:
-        return jsonify({'error':error_list})
+        return jsonify({'error':error_list}),400
             
 
     
@@ -70,17 +75,28 @@ def predict():
 # def handle_bad_request(e):
 #     return 'Internal Server Error!', 500
     
+@app.errorhandler(404)
+  
+# inbuilt function which takes error as parameter
+def not_found(e):
+  
+# defining function
+  return redirect("/api/docs")
 
 @app.route("/")
-def hello_world():
-    return """Zero Shot Learning - API<br><br>
-        <u>API Format</u><br>
+def home_page():
+
+    return render_template('swaggerui.html')
 
 
-        <h1>GET</h1><br>
-        &lt;url&gt;/predict?sequence=<b>&lt;sequence&gt;</b>&labels=<b>&lt;label_1&gt;</b>&labels=<b>&lt;label_2&gt;</b><br><br>
-        <h1>POST</h1><br>
-        {"sequence":&lt;sequence&gt;, "labels":[&lt;label_1&gt;, &lt;label_2&gt;]"""
+    # return """Zero Shot Learning - API<br><br>
+    #     <u>API Format</u><br>
+
+
+    #     <h1>GET</h1><br>
+    #     &lt;url&gt;/predict?sequence=<b>&lt;sequence&gt;</b>&labels=<b>&lt;label_1&gt;</b>&labels=<b>&lt;label_2&gt;</b><br><br>
+    #     <h1>POST</h1><br>
+    #     {"sequence":&lt;sequence&gt;, "labels":[&lt;label_1&gt;, &lt;label_2&gt;]"""
 
 
 
